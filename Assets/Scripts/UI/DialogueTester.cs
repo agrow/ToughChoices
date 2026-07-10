@@ -1,28 +1,23 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class DialogueTester : MonoBehaviour
 {
-    [Header("Dialogue UI")]
-    [SerializeField] private GameObject dialogueUI;
-    [SerializeField] private TMP_Text speakerNameText;
-    [SerializeField] private TMP_Text dialogueText;
-    [SerializeField] private Button clickAnywhereButton;
-
-    [Header("Choice UI")]
-    [SerializeField] private GameObject choicePanel;
-    [SerializeField] private Button[] choiceButtons;
-
-    private int dialogueIndex = 0;
-
-    private readonly string[] dialogueLines =
+    [Serializable]
+    public class DialogueLine
     {
-        "Hey! I heard there's a leadership position open in our organization. I think you'd be a great fit.",
-        "Have you thought about applying?",
-    };
+        public string speakerName;
 
-    private readonly string[] choiceLabels =
+        [TextArea(2, 5)]
+        public string dialogueText;
+    }
+
+    [Header("Scenario Content")]
+    [SerializeField] private DialogueLine[] dialogueLines;
+
+    [SerializeField] private string[] choiceLabels =
     {
         "VERY LIKELY",
         "SOMEWHAT LIKELY",
@@ -31,31 +26,56 @@ public class DialogueTester : MonoBehaviour
         "VERY UNLIKELY"
     };
 
+    [Header("Dialogue UI")]
+    [SerializeField] private GameObject dialogueUI;
+    [SerializeField] private TMP_Text nameText;
+    [SerializeField] private TMP_Text dialogueText;
+    [SerializeField] private RectTransform dialoguePanelSize;
+    [SerializeField] private RectTransform dialogueTextSize;
+    [SerializeField] private Button clickAnywhereButton;
+
+    [Header("Choice UI")]
+    [SerializeField] private GameObject choicesUI;
+    [SerializeField] private Button[] choiceButtons;
+    [SerializeField] private TMP_Text[] choiceButtonTexts;
+
+    private int dialogueIndex = 0;
+
     private void Start()
     {
-        // Show dialogue immediately
         dialogueUI.SetActive(true);
-        choicePanel.SetActive(false);
+        choicesUI.SetActive(false);
 
-        // Set first dialogue
-        speakerNameText.text = "STEVE";
         dialogueIndex = 0;
         ShowCurrentDialogue();
 
-        // Advance dialogue when clicking anywhere
         clickAnywhereButton.onClick.AddListener(AdvanceDialogue);
 
-        // Hook up the choice buttons
         for (int i = 0; i < choiceButtons.Length; i++)
         {
             int capturedIndex = i;
+
+            if (i < choiceButtonTexts.Length && i < choiceLabels.Length)
+            {
+                choiceButtonTexts[i].text = choiceLabels[i];
+            }
+
             choiceButtons[i].onClick.AddListener(() => SelectChoice(capturedIndex));
         }
     }
 
     private void ShowCurrentDialogue()
     {
-        dialogueText.text = dialogueLines[dialogueIndex];
+        if (dialogueLines.Length == 0)
+        {
+            Debug.LogWarning("No dialogue lines assigned.");
+            return;
+        }
+
+        DialogueLine currentLine = dialogueLines[dialogueIndex];
+
+        nameText.text = currentLine.speakerName;
+        dialogueText.text = currentLine.dialogueText;
     }
 
     private void AdvanceDialogue()
@@ -73,20 +93,20 @@ public class DialogueTester : MonoBehaviour
 
     private void ShowChoices()
     {
-        // Keep the dialogue visible
-        // Just reveal the choice panel
-        choicePanel.SetActive(true);
+        dialoguePanelSize.sizeDelta = new Vector2(280f, dialoguePanelSize.sizeDelta.y);
+        dialogueTextSize.sizeDelta = new Vector2(240f, dialogueTextSize.sizeDelta.y);
 
-        // Stop allowing dialogue advancement
+        choicesUI.SetActive(true);
         clickAnywhereButton.gameObject.SetActive(false);
     }
 
     private void SelectChoice(int index)
     {
-        Debug.Log("Choice selected: " + choiceLabels[index]);
+        string selectedChoice = choiceLabels[index];
 
-        choicePanel.SetActive(false);
+        Debug.Log("Choice selected: " + selectedChoice);
 
-        dialogueText.text = "You selected: " + choiceLabels[index];
+        choicesUI.SetActive(false);
+        dialogueText.text = "You selected: " + selectedChoice;
     }
 }

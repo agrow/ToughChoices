@@ -119,6 +119,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!224 &219340510 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4534456686886973069, guid: 7d4d3c88f889d7f479405548e827ee2c, type: 3}
+  m_PrefabInstance: {fileID: 467653685}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -681,11 +686,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
---- !u!1 &467653693 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6055312662911501104, guid: 7d4d3c88f889d7f479405548e827ee2c, type: 3}
-  m_PrefabInstance: {fileID: 467653685}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &467653694 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5341378681344228180, guid: 7d4d3c88f889d7f479405548e827ee2c, type: 3}
@@ -702,6 +702,38 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2551331962536717419, guid: 7d4d3c88f889d7f479405548e827ee2c, type: 3}
   m_PrefabInstance: {fileID: 467653685}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &577840547
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 577840548}
+  m_Layer: 0
+  m_Name: ----- MANAGERS -----
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &577840548
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 577840547}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1450.844, y: 656.50604, z: -129.85352}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1883275116}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -830,6 +862,16 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!224 &986232496 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 1675428964755429040, guid: 7d4d3c88f889d7f479405548e827ee2c, type: 3}
+  m_PrefabInstance: {fileID: 467653685}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1569743357 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7404826352705596847, guid: 7d4d3c88f889d7f479405548e827ee2c, type: 3}
+  m_PrefabInstance: {fileID: 467653685}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1883275114
 GameObject:
   m_ObjectHideFlags: 0
@@ -859,17 +901,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ad7a19ae40d8294a81d7c71267873be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogueTester
+  dialogueLines:
+  - speakerName: STEVE
+    dialogueText: Hey! I heard there's a leadership position open in our organization.
+  - speakerName: STEVE
+    dialogueText: I think you'd be a great fit.
+  - speakerName: STEVE
+    dialogueText: Have you thought about applying?
+  choiceLabels:
+  - VERY LIKELY
+  - SOMEWHAT LIKELY
+  - UNSURE
+  - SOMEWHAT UNLIKELY
+  - VERY UNLIKELY
   dialogueUI: {fileID: 467653695}
-  speakerNameText: {fileID: 467653688}
+  nameText: {fileID: 467653688}
   dialogueText: {fileID: 467653687}
+  dialoguePanelSize: {fileID: 219340510}
+  dialogueTextSize: {fileID: 986232496}
   clickAnywhereButton: {fileID: 467653694}
-  choicePanel: {fileID: 467653693}
+  choicesUI: {fileID: 1569743357}
   choiceButtons:
   - {fileID: 467653692}
   - {fileID: 467653691}
   - {fileID: 467653690}
   - {fileID: 467653689}
   - {fileID: 467653686}
+  choiceButtonTexts: []
 --- !u!4 &1883275116
 Transform:
   m_ObjectHideFlags: 0
@@ -878,20 +936,20 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1883275114}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 967.33356, y: 0.00001, z: 8622.243}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -483.51044, y: -656.50604, z: 8752.097}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 577840548}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 577840548}
   - {fileID: 330585546}
   - {fileID: 410087041}
   - {fileID: 832575519}
   - {fileID: 926687229}
   - {fileID: 467653685}
-  - {fileID: 1883275116}
