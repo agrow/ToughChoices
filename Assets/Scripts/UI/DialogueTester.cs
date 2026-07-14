@@ -30,8 +30,8 @@ public class DialogueTester : MonoBehaviour
     [SerializeField] private GameObject dialogueUI;
     [SerializeField] private TMP_Text nameText;
     [SerializeField] private TMP_Text dialogueText;
-    [SerializeField] private RectTransform dialoguePanelSize;
-    [SerializeField] private RectTransform dialogueTextSize;
+    [SerializeField] private RectTransform dialoguePanelRect;
+    [SerializeField] private RectTransform dialogueTextRect;
     [SerializeField] private Button clickAnywhereButton;
 
     [Header("Choice UI")]
@@ -39,12 +39,26 @@ public class DialogueTester : MonoBehaviour
     [SerializeField] private Button[] choiceButtons;
     [SerializeField] private TMP_Text[] choiceButtonTexts;
 
+    [Header("Results UI")]
+    [SerializeField] private GameObject resultsUI;
+    [SerializeField] private TMP_Text selectedChoiceText;
+    [SerializeField] private TMP_InputField explanationInputField;
+    [SerializeField] private Button submitButton;
+
+    [Header("Background UI")]
+    [SerializeField] private GameObject backgroundUI;
+
+    private string selectedChoice;
+
     private int dialogueIndex = 0;
 
     private void Start()
     {
         dialogueUI.SetActive(true);
         choicesUI.SetActive(false);
+        resultsUI.SetActive(false);
+        backgroundUI.SetActive(false);
+        submitButton.onClick.AddListener(SubmitExplanation);
 
         dialogueIndex = 0;
         ShowCurrentDialogue();
@@ -93,8 +107,9 @@ public class DialogueTester : MonoBehaviour
 
     private void ShowChoices()
     {
-        dialoguePanelSize.sizeDelta = new Vector2(280f, dialoguePanelSize.sizeDelta.y);
-        dialogueTextSize.sizeDelta = new Vector2(240f, dialogueTextSize.sizeDelta.y);
+        dialoguePanelRect.sizeDelta = new Vector2(285f, dialoguePanelRect.sizeDelta.y);
+        dialogueTextRect.sizeDelta = new Vector2(245f, dialogueTextRect.sizeDelta.y);
+        dialogueText.fontSize = 14.5f;
 
         choicesUI.SetActive(true);
         clickAnywhereButton.gameObject.SetActive(false);
@@ -102,11 +117,33 @@ public class DialogueTester : MonoBehaviour
 
     private void SelectChoice(int index)
     {
-        string selectedChoice = choiceLabels[index];
+        selectedChoice = choiceLabels[index];
 
         Debug.Log("Choice selected: " + selectedChoice);
 
         choicesUI.SetActive(false);
-        dialogueText.text = "You selected: " + selectedChoice;
+        dialogueUI.SetActive(false);
+
+        ShowResultsScreen();
+    }
+
+    private void ShowResultsScreen()
+    {
+        resultsUI.SetActive(true);
+        backgroundUI.SetActive(true);
+
+        selectedChoiceText.text = selectedChoice;
+        explanationInputField.text = "";
+        explanationInputField.ActivateInputField();
+    }
+
+    private void SubmitExplanation()
+    {
+        string explanation = explanationInputField.text;
+
+        Debug.Log("Selected choice: " + selectedChoice);
+        Debug.Log("Explanation: " + explanation);
+
+        resultsUI.SetActive(false);
     }
 }
