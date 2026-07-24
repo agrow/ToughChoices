@@ -31,10 +31,14 @@ public class ScenarioManager : MonoBehaviour
 
     [Header("Navigation")]
     [SerializeField] private Button homeButton;
+    [SerializeField] private Button settingsButton;
 
     [Header("Start Screen UI")]
     [SerializeField] private GameObject startScreenUI;
     [SerializeField] private Button startButton;
+
+    [Header("Settings Screen UI")]
+    [SerializeField] private GameObject settingsUI;
 
     [Header("Dialogue UI")]
     [SerializeField] private GameObject dialogueUI;
@@ -43,12 +47,14 @@ public class ScenarioManager : MonoBehaviour
     [SerializeField] private RectTransform dialoguePanelRect;
     [SerializeField] private RectTransform dialogueTextRect;
     [SerializeField] private Button clickAnywhereButton;
+    [SerializeField] private Button rightNextButton;
+    [SerializeField] private Button leftNextButton;
 
     [Header("Dialogue Layout")]
     [SerializeField] private Vector2 fullDialoguePanelSize = new Vector2(1840f, 390f);
     [SerializeField] private Vector2 choiceDialoguePanelSize = new Vector2(1111f, 390f);
 
-    [SerializeField] private Vector2 fullDialogueTextSize = new Vector2(1700f, 250f);
+    [SerializeField] private Vector2 fullDialogueTextSize = new Vector2(1495f, 250f);
     [SerializeField] private Vector2 choiceDialogueTextSize = new Vector2(939f, 250f);
 
     [SerializeField] private float fullDialogueFontSize = 55f;
@@ -79,9 +85,12 @@ public class ScenarioManager : MonoBehaviour
         ShowStartScreen();
 
         homeButton.onClick.AddListener(ShowStartScreen);
+        settingsButton.onClick.AddListener(ShowSettingsScreen);
         startButton.onClick.AddListener(ShowDialogue);
         submitButton.onClick.AddListener(SubmitExplanation);
-        clickAnywhereButton.onClick.AddListener(AdvanceDialogue);
+        clickAnywhereButton.onClick.AddListener(ShowNextDialogue);
+        rightNextButton.onClick.AddListener(ShowNextDialogue);
+        leftNextButton.onClick.AddListener(ShowPreviousDialogue);
 
         for (int i = 0; i < choiceButtons.Length; i++)
         {
@@ -113,6 +122,38 @@ public class ScenarioManager : MonoBehaviour
         choicesUI.SetActive(false);
         resultsUI.SetActive(false);
 
+        settingsButton.gameObject.SetActive(false);
+        homeButton.gameObject.SetActive(false);
+        clickAnywhereButton.gameObject.SetActive(true);
+
+        if (explanationInputField != null)
+        {
+            explanationInputField.text = "";
+        }
+    }
+
+        private void ShowSettingsScreen()
+    {
+        if (typingCoroutine != null)
+        {
+            StopCoroutine(typingCoroutine);
+        }
+
+        isTyping = false;
+        dialogueIndex = 0;
+        selectedChoice = "";
+
+
+        settingsUI.SetActive(true);
+        backgroundUI.SetActive(true);
+        startScreenUI.SetActive(false);
+        dialogueUI.SetActive(false);
+        choicesUI.SetActive(false);
+        resultsUI.SetActive(false);
+
+        settingsButton.gameObject.SetActive(false);
+        homeButton.gameObject.SetActive(true);
+
         clickAnywhereButton.gameObject.SetActive(true);
 
         if (explanationInputField != null)
@@ -123,11 +164,15 @@ public class ScenarioManager : MonoBehaviour
 
     private void ShowDialogue()
     {
-        startScreenUI.SetActive(false);
-        backgroundUI.SetActive(false);
         dialogueUI.SetActive(true);
+        startScreenUI.SetActive(false);
+        settingsUI.SetActive(false);
+        backgroundUI.SetActive(false);
         choicesUI.SetActive(false);
         resultsUI.SetActive(false);
+
+        settingsButton.gameObject.SetActive(true);
+        homeButton.gameObject.SetActive(false);
 
         ApplyFullDialogueLayout();
 
@@ -135,15 +180,49 @@ public class ScenarioManager : MonoBehaviour
         ShowCurrentDialogue();
     }
 
+    private void UpdateDialogueNavigation()
+    {
+        bool hasMultipleLines = dialogueLines.Length > 1;
+        bool isFirstLine = dialogueIndex == 0;
+        bool isLastLine = dialogueIndex == dialogueLines.Length - 1;
+
+        leftNextButton.gameObject.SetActive(
+            hasMultipleLines && !isFirstLine
+        );
+
+        rightNextButton.gameObject.SetActive(
+            hasMultipleLines && !isLastLine
+        );
+
+        choicesUI.SetActive(isLastLine);
+
+        if (isLastLine)
+        {
+            ApplyChoiceDialogueLayout();
+            clickAnywhereButton.gameObject.SetActive(false);
+        }
+        else
+        {
+            ApplyFullDialogueLayout();
+            clickAnywhereButton.gameObject.SetActive(true);
+        }
+    }
+
     private void ShowCurrentDialogue()
     {
-        clickAnywhereButton.gameObject.SetActive(true);
-
-        if (dialogueLines.Length == 0)
+        if (dialogueLines == null || dialogueLines.Length == 0)
         {
             Debug.LogWarning("No dialogue lines assigned.");
             return;
         }
+
+        dialogueIndex = Mathf.Clamp(
+            dialogueIndex,
+            0,
+            dialogueLines.Length - 1
+        );
+
+        UpdateDialogueNavigation();
 
         DialogueLine currentLine = dialogueLines[dialogueIndex];
 
@@ -154,7 +233,12 @@ public class ScenarioManager : MonoBehaviour
             StopCoroutine(typingCoroutine);
         }
 
-        typingCoroutine = StartCoroutine(TypeDialogue(currentLine.dialogueText, currentLine.typingSpeed));
+        typingCoroutine = StartCoroutine(
+            TypeDialogue(
+                currentLine.dialogueText,
+                currentLine.typingSpeed
+            )
+        );
     }
 
     private IEnumerator TypeDialogue(string line, float typingSpeed)
@@ -171,28 +255,58 @@ public class ScenarioManager : MonoBehaviour
         isTyping = false;
     }
 
-    private void AdvanceDialogue()
+        private bool FinishTypingImmediately()
     {
-        if (isTyping)
+        if (!isTyping)
         {
-            if (typingCoroutine != null)
-            {
-                StopCoroutine(typingCoroutine);
-            }
+            return false;
+        }
 
-            dialogueText.text = dialogueLines[dialogueIndex].dialogueText;
-            isTyping = false;
+        if (typingCoroutine != null)
+        {
+            StopCoroutine(typingCoroutine);
+            typingCoroutine = null;
+        }
+
+        dialogueText.text =
+            dialogueLines[dialogueIndex].dialogueText;
+
+        isTyping = false;
+        return true;
+    }
+
+    private void ShowNextDialogue()
+    {
+        if (FinishTypingImmediately())
+        {
+            return;
+        }
+
+        if (dialogueIndex >= dialogueLines.Length - 1)
+        {
             return;
         }
 
         dialogueIndex++;
+        ShowCurrentDialogue();
+    }
 
-        if (dialogueIndex >= dialogueLines.Length)
+    private void ShowPreviousDialogue()
+    {
+        if (typingCoroutine != null)
         {
-            ShowChoices();
+            StopCoroutine(typingCoroutine);
+            typingCoroutine = null;
+        }
+
+        isTyping = false;
+
+        if (dialogueIndex <= 0)
+        {
             return;
         }
 
+        dialogueIndex--;
         ShowCurrentDialogue();
     }
 
@@ -201,6 +315,7 @@ public class ScenarioManager : MonoBehaviour
         ApplyChoiceDialogueLayout();
 
         choicesUI.SetActive(true);
+        leftNextButton.gameObject.SetActive(true);
         clickAnywhereButton.gameObject.SetActive(false);
     }
 
@@ -234,6 +349,9 @@ public class ScenarioManager : MonoBehaviour
     {
         resultsUI.SetActive(true);
         backgroundUI.SetActive(true);
+
+        settingsButton.gameObject.SetActive(true);
+        homeButton.gameObject.SetActive(false);
 
         selectedChoiceText.text = selectedChoice;
         explanationInputField.text = "";
