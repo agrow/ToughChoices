@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: ea563bd13d5114c75b06c510e8bebf0d
+timeCreated: 1518653963
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 111778
+  packageName: FREE Stylized PBR Textures Pack
+  packageVersion: 1.55
+  assetPath: Assets/OutdoorSceneAssets/TrackDirtMaterial/DIRT/Dirt_Path/Materials/Dirt_Path.mat
+  uploadId: 585011
