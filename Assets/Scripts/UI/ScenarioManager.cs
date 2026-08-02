@@ -32,6 +32,7 @@ public class ScenarioManager : MonoBehaviour
     [Header("Navigation")]
     [SerializeField] private Button homeButton;
     [SerializeField] private Button settingsButton;
+    [SerializeField] private Button adminButton;
 
     [Header("Start Screen UI")]
     [SerializeField] private GameObject startScreenUI;
@@ -39,6 +40,7 @@ public class ScenarioManager : MonoBehaviour
 
     [Header("Settings Screen UI")]
     [SerializeField] private GameObject settingsUI;
+    [SerializeField] private Button confirmSettingsButton;
 
     [Header("Dialogue UI")]
     [SerializeField] private GameObject dialogueUI;
@@ -74,6 +76,13 @@ public class ScenarioManager : MonoBehaviour
     [Header("Background UI")]
     [SerializeField] private GameObject backgroundUI;
 
+    private bool startScreenWasActive;
+    private bool dialogueWasActive;
+    private bool choicesWereActive;
+    private bool resultsWereActive;
+    private bool backgroundWasActive;
+    private bool clickAnywhereWasActive;
+
     private string selectedChoice;
     private int dialogueIndex = 0;
 
@@ -84,13 +93,16 @@ public class ScenarioManager : MonoBehaviour
     {
         ShowStartScreen();
 
-        homeButton.onClick.AddListener(ShowStartScreen);
+        //homeButton.onClick.AddListener(ShowStartScreen);
         settingsButton.onClick.AddListener(ShowSettingsScreen);
+        confirmSettingsButton.onClick.AddListener(HideSettingsScreen);
         startButton.onClick.AddListener(ShowDialogue);
         submitButton.onClick.AddListener(SubmitExplanation);
         clickAnywhereButton.onClick.AddListener(ShowNextDialogue);
         rightNextButton.onClick.AddListener(ShowNextDialogue);
         leftNextButton.onClick.AddListener(ShowPreviousDialogue);
+
+        settingsUI.SetActive(false);
 
         for (int i = 0; i < choiceButtons.Length; i++)
         {
@@ -122,9 +134,9 @@ public class ScenarioManager : MonoBehaviour
         choicesUI.SetActive(false);
         resultsUI.SetActive(false);
 
-        settingsButton.gameObject.SetActive(false);
-        homeButton.gameObject.SetActive(false);
+        settingsButton.gameObject.SetActive(true);
         clickAnywhereButton.gameObject.SetActive(true);
+        adminButton.gameObject.SetActive(false);
 
         if (explanationInputField != null)
         {
@@ -132,34 +144,56 @@ public class ScenarioManager : MonoBehaviour
         }
     }
 
-        private void ShowSettingsScreen()
+    private void ShowSettingsScreen()
     {
-        if (typingCoroutine != null)
-        {
-            StopCoroutine(typingCoroutine);
-        }
+        // Remember the current UI state
+        startScreenWasActive = startScreenUI.activeSelf;
+        dialogueWasActive = dialogueUI.activeSelf;
+        choicesWereActive = choicesUI.activeSelf;
+        resultsWereActive = resultsUI.activeSelf;
+        backgroundWasActive = backgroundUI.activeSelf;
+        clickAnywhereWasActive = clickAnywhereButton.gameObject.activeSelf;
 
-        isTyping = false;
-        dialogueIndex = 0;
-        selectedChoice = "";
-
-
-        settingsUI.SetActive(true);
-        backgroundUI.SetActive(true);
+        // Hide the current screen
         startScreenUI.SetActive(false);
         dialogueUI.SetActive(false);
         choicesUI.SetActive(false);
         resultsUI.SetActive(false);
+        backgroundUI.SetActive(false);
+        clickAnywhereButton.gameObject.SetActive(false);
 
+        // Show Settings
+        settingsUI.SetActive(true);
+        backgroundUI.SetActive(true);
+        adminButton.gameObject.SetActive(true);
         settingsButton.gameObject.SetActive(false);
-        homeButton.gameObject.SetActive(true);
+    }
 
-        clickAnywhereButton.gameObject.SetActive(true);
+    private void HideSettingsScreen()
+    {
+        settingsUI.SetActive(false);
+        backgroundUI.SetActive(false);
+        adminButton.gameObject.SetActive(false);
 
-        if (explanationInputField != null)
-        {
-            explanationInputField.text = "";
-        }
+        // Restore whichever UI was active before Settings opened
+        startScreenUI.SetActive(startScreenWasActive);
+        dialogueUI.SetActive(dialogueWasActive);
+        choicesUI.SetActive(choicesWereActive);
+        resultsUI.SetActive(resultsWereActive);
+        backgroundUI.SetActive(backgroundWasActive);
+        clickAnywhereButton.gameObject.SetActive(clickAnywhereWasActive);
+
+        settingsButton.gameObject.SetActive(true);
+    }
+    
+    private void ShowAdminPin()
+    {
+        
+    }
+
+    private void ShowScenarioSelectionScreen()
+    {
+        
     }
 
     private void ShowDialogue()
@@ -233,12 +267,11 @@ public class ScenarioManager : MonoBehaviour
             StopCoroutine(typingCoroutine);
         }
 
-        typingCoroutine = StartCoroutine(
-            TypeDialogue(
-                currentLine.dialogueText,
-                currentLine.typingSpeed
-            )
+        float adjustedTypingSpeed = currentLine.typingSpeed / SettingsManager.TextSpeedMultiplier;
+        typingCoroutine = StartCoroutine(TypeDialogue(currentLine.dialogueText,adjustedTypingSpeed)
+        
         );
+
     }
 
     private IEnumerator TypeDialogue(string line, float typingSpeed)
