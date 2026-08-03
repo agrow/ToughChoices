@@ -24,12 +24,17 @@ cycle through multiple animations, or they may only perform one for the whole ga
 public class NPCAnimations : MonoBehaviour
 {
     public string animation;
+    public float speed;
+    public Transform CenterEnd1;
+    public Transform CenterEnd2;
 
     private Animator animator;
     private float crossfade = 0.0f;
     private float timer;
     private bool animationStarted = false;
-
+    private float trackTransitionX1 = -27.5f;
+    private float trackTransitionX2 = 3.3f;
+    
     private string idle = "Idle";
     private string running = "Running";
     private string walking = "Walking";
@@ -77,8 +82,18 @@ public class NPCAnimations : MonoBehaviour
         }
         else if (String.Compare(walking, animation) == 0)
         {
-            animator.CrossFade(walking, crossfade);
-            animationStarted = true;
+            // Get the local X position (relative to parent)
+            float localX = transform.localPosition.x;
+
+            if (localX <= trackTransitionX2 && localX >= trackTransitionX1)
+            {
+                transform.position += transform.forward * speed * Time.deltaTime;
+                animator.CrossFade(walking, crossfade);
+            }
+            else if (localX <= trackTransitionX1)
+            {
+                transform.RotateAround(CenterEnd1.position, new Vector3(0, -1f, 0), 4 * Time.deltaTime);
+            }
         }
         else if (String.Compare(jump, animation) == 0)
         {
