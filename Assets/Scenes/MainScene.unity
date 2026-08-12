@@ -3865,6 +3865,53 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 544369993}
   m_CullTransparentMesh: 1
+--- !u!1 &560860550
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 560860552}
+  - component: {fileID: 560860551}
+  m_Layer: 0
+  m_Name: ScenarioSequenceManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &560860551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 560860550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92dbbace4f633614787290ab0c763760, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScenarioSequenceManager
+  allScenarios:
+  - {fileID: 11400000, guid: cded17d648db4444e8bce0efb9b09271, type: 2}
+  - {fileID: 11400000, guid: cded17d648db4444e8bce0efb9b09271, type: 2}
+--- !u!4 &560860552
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 560860550}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 503.51392, y: 0, z: 3200.8655}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &574558075
 GameObject:
   m_ObjectHideFlags: 0
@@ -7417,7 +7464,7 @@ GameObject:
   - component: {fileID: 986285767}
   - component: {fileID: 986285766}
   m_Layer: 5
-  m_Name: SettingsButton
+  m_Name: SettingsStartButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13499,38 +13546,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ad7a19ae40d8294a81d7c71267873be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogueTester
-  dialogueLines:
-  - speakerName: ' '
-    dialogueText: Imagine you are part of a student organization and a leadership
-      position within that organization becomes available.
-    typingSpeed: 0.03
-  - speakerName: ' '
-    dialogueText: 'You really want this position, but you have never taken on a leadership
-      role before. Therefore, it is unknown whether you can manage the responsibilities. '
-    typingSpeed: 0.03
-  - speakerName: ' '
-    dialogueText: 'Additionally, there are other members interested in this leadership
-      position, so you do not know whether you will be selected. '
-    typingSpeed: 0.03
-  - speakerName: ' '
-    dialogueText: How likely are you to apply for the leadership role?
-    typingSpeed: 0.03
+  scenarioData: {fileID: 11400000, guid: cded17d648db4444e8bce0efb9b09271, type: 2}
   choiceLabels:
   - VERY LIKELY
   - SOMEWHAT LIKELY
   - UNSURE
   - SOMEWHAT UNLIKELY
   - VERY UNLIKELY
+  scenarioSequenceManager: {fileID: 560860551}
   homeButton: {fileID: 1569744557}
   settingsButton: {fileID: 50716505}
   adminButton: {fileID: 1075652708}
   startScreenUI: {fileID: 287357952}
   startButton: {fileID: 852382251}
-  settingsStartButton: {fileID: 0}
+  settingsStartButton: {fileID: 986285766}
   settingsUI: {fileID: 1006255999}
   confirmSettingsButton: {fileID: 1111030885}
   introductionUI: {fileID: 205961800}
   nextButton: {fileID: 574558077}
+  scenarioSelectionUI: {fileID: 1402828109}
   dialogueUI: {fileID: 2551331962900330590}
   nameText: {fileID: 292793160973652967}
   dialogueText: {fileID: 7959163559912877579}
@@ -13557,6 +13591,7 @@ MonoBehaviour:
   selectedChoiceText: {fileID: 2198792483177899462}
   explanationInputField: {fileID: 7627683573585434921}
   submitButton: {fileID: 8063165947708568670}
+  submitResponsePrompt: {fileID: 0}
   backgroundUI: {fileID: 9004591087856231037}
   adminPromptUI: {fileID: 1890137421}
 --- !u!4 &1883275116
@@ -15861,7 +15896,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &2551331963593136012
 GameObject:
   m_ObjectHideFlags: 0
@@ -15998,10 +16033,10 @@ RectTransform:
   - {fileID: 6274088560302546745}
   m_Father: {fileID: 4626208062865126553}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1300, y: -1072.1033}
-  m_SizeDelta: {x: 569, y: 136}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &3329062188672076787
 RectTransform:
@@ -17226,10 +17261,10 @@ RectTransform:
   - {fileID: 3133950193022666350}
   m_Father: {fileID: 4626208062865126553}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1300, y: -2980.1033}
-  m_SizeDelta: {x: 569, y: 136}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &5910355623885012058
 MonoBehaviour:
@@ -17251,7 +17286,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: How likely are you to apply for the leadership role?
+  m_text: How likely are you to enter the competition?
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c2dbfa5ce97338d4593c91bb8bb3d80f, type: 2}
   m_sharedMaterial: {fileID: 4438028900370168450, guid: c2dbfa5ce97338d4593c91bb8bb3d80f, type: 2}
@@ -17278,7 +17313,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 14.25
+  m_fontSize: 16
   m_fontSizeBase: 14
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -17447,10 +17482,10 @@ RectTransform:
   - {fileID: 3329062188672076787}
   m_Father: {fileID: 4626208062865126553}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1300, y: -1708.1033}
-  m_SizeDelta: {x: 569, y: 136}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6132718346798716981
 CanvasRenderer:
@@ -18513,10 +18548,10 @@ RectTransform:
   - {fileID: 701504191588802296}
   m_Father: {fileID: 4626208062865126553}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1300, y: -2344.1033}
-  m_SizeDelta: {x: 569, y: 136}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &8346900341563317368
 GameObject:
@@ -18549,10 +18584,10 @@ RectTransform:
   - {fileID: 189817101956441252}
   m_Father: {fileID: 4626208062865126553}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1300, y: -436.10327}
-  m_SizeDelta: {x: 569, y: 136}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &8886807676517610499
 MonoBehaviour:
@@ -18659,6 +18694,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 577840548}
   - {fileID: 1883275116}
+  - {fileID: 560860552}
   - {fileID: 833058307}
   - {fileID: 159036989}
   - {fileID: 1523424694}

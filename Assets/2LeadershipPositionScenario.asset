@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f112c1a561f36bc4eb309a06360bedf4, type: 3}
+  m_Name: 2LeadershipPositionScenario
+  m_EditorClassIdentifier: Assembly-CSharp::ScenarioData
+  scenarioName: Leadership Position
+  sceneName: TBD
+  dialogueLines:
+  - speakerName: 
+    dialogueText: 'Imagine you are part of a student organization and a leadership
+      position within that organization becomes available. '
+    typingSpeed: 0.03
+  - speakerName: 
+    dialogueText: 'You really want this position, but you have never taken on a leadership
+      role before. Therefore, it is unknown whether you can manage the responsibilities. '
+    typingSpeed: 0.03
+  - speakerName: 
+    dialogueText: 'Additionally, there are other members interested in this leadership
+      position, so you do not know whether you will be selected. '
+    typingSpeed: 0.03
+  - speakerName: 
+    dialogueText: How likely are you to apply for the leadership role?
+    typingSpeed: 0.03
+  questionText: How likely are you to apply for the leadership role?

@@ -3,22 +3,12 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class ScenarioManager : MonoBehaviour
 {
-    [Serializable]
-    public class DialogueLine
-    {
-        public string speakerName;
-
-        [TextArea(2, 5)]
-        public string dialogueText;
-
-        public float typingSpeed = 0.03f;
-    }
-
     [Header("Scenario Content")]
-    [SerializeField] private DialogueLine[] dialogueLines;
+    [SerializeField] private ScenarioData scenarioData;
 
     [SerializeField] private string[] choiceLabels =
     {
@@ -28,6 +18,9 @@ public class ScenarioManager : MonoBehaviour
         "SOMEWHAT UNLIKELY",
         "VERY UNLIKELY"
     };
+
+    [Header("Scenario Sequence")]
+    [SerializeField] private ScenarioSequenceManager scenarioSequenceManager;
 
     [Header("Navigation")]
     [SerializeField] private Button homeButton;
@@ -80,6 +73,7 @@ public class ScenarioManager : MonoBehaviour
     [SerializeField] private TMP_Text selectedChoiceText;
     [SerializeField] private TMP_InputField explanationInputField;
     [SerializeField] private Button submitButton;
+    [SerializeField] private GameObject submitResponsePrompt;
 
     [Header("Background UI")]
     [SerializeField] private GameObject backgroundUI;
@@ -102,6 +96,8 @@ public class ScenarioManager : MonoBehaviour
 
     private void Start()
     {
+        scenarioData = scenarioSequenceManager.GetCurrentScenario();
+        
         ShowStartScreen();
 
         //homeButton.onClick.AddListener(ShowStartScreen);
@@ -114,7 +110,7 @@ public class ScenarioManager : MonoBehaviour
         clickAnywhereButton.onClick.AddListener(ShowNextDialogue);
         rightNextButton.onClick.AddListener(ShowNextDialogue);
         leftNextButton.onClick.AddListener(ShowPreviousDialogue);
-        nextButton.onClick.AddListener(ShowDialogue);
+        nextButton.onClick.AddListener(StartScenario);
         adminPromptUI.SetActive(false);
         settingsUI.SetActive(false);
 
@@ -227,6 +223,126 @@ public class ScenarioManager : MonoBehaviour
         adminButton.gameObject.SetActive(false);
     }
 
+    private IEnumerator LoadScenarioScene()
+    {
+        if (scenarioData == null)
+        {
+            Debug.LogWarning("No Scenario Data assigned.");
+            yield break;
+        }
+
+        string sceneName = scenarioData.sceneName;
+
+        if (SceneManager.GetSceneByName(sceneName).isLoaded)
+        {
+            yield break;
+        }
+
+        AsyncOperation loadOperation =
+            SceneManager.LoadSceneAsync(
+                sceneName,
+                LoadSceneMode.Additive
+            );
+
+        while (!loadOperation.isDone)
+        {
+            yield return null;
+        }
+
+        Debug.Log("Loaded scenario scene: " + sceneName);
+    }
+
+    private void StartScenario()
+    {
+        StartCoroutine(StartScenarioSequence());
+    }
+
+    private IEnumerator StartScenarioSequence()
+    {
+        yield return StartCoroutine(LoadScenarioScene());
+
+        ShowDialogue();
+    }
+
+    public void SetScenario(ScenarioData newScenario)
+    {
+        scenarioData = newScenario;
+        dialogueIndex = 0;
+    }
+
+    private string previousScenarioSceneName;
+
+    private IEnumerator SwitchToNextScenario()
+    {
+        resultsUI.SetActive(false);
+        dialogueUI.SetActive(false);
+        choicesUI.SetActive(false);
+
+        Scene currentScene =
+            SceneManager.GetSceneByName(
+                previousScenarioSceneName
+            );
+
+        if (currentScene.isLoaded)
+        {
+            yield return SceneManager.UnloadSceneAsync(
+                previousScenarioSceneName
+            );
+        }
+
+        // Load the next scenario environment immediately.
+        yield return StartCoroutine(
+            LoadScenarioScene()
+        );
+
+        // Start its dialogue immediately.
+        ShowDialogue();
+    }
+
+    private IEnumerator FinishAllScenarios()
+    {
+        string finalSceneName = scenarioData.sceneName;
+
+        Scene finalScene =
+            SceneManager.GetSceneByName(finalSceneName);
+
+        if (finalScene.isLoaded)
+        {
+            yield return SceneManager.UnloadSceneAsync(finalSceneName);
+        }
+
+        ShowEndScreen();
+    }
+
+    private void GoToNextScenario()
+    {
+        if (scenarioSequenceManager.HasMoreScenarios())
+        {
+            // Save the CURRENT environment before changing scenarioData.
+            previousScenarioSceneName = scenarioData.sceneName;
+
+            ScenarioData nextScenario =
+                scenarioSequenceManager.GetNextScenario();
+
+            SetScenario(nextScenario);
+
+            StartCoroutine(SwitchToNextScenario());
+        }
+        else
+        {
+            StartCoroutine(FinishAllScenarios());
+        }
+    }
+
+    private void ShowEndScreen()
+    {
+        dialogueUI.SetActive(false);
+        choicesUI.SetActive(false);
+        resultsUI.SetActive(false);
+
+        Debug.Log("All scenarios completed.");
+    }
+
     private void ShowDialogue()
     {
         dialogueUI.SetActive(true);
@@ -248,9 +364,9 @@ public class ScenarioManager : MonoBehaviour
 
     private void UpdateDialogueNavigation()
     {
-        bool hasMultipleLines = dialogueLines.Length > 1;
+        bool hasMultipleLines = scenarioData.dialogueLines.Length > 1;
         bool isFirstLine = dialogueIndex == 0;
-        bool isLastLine = dialogueIndex == dialogueLines.Length - 1;
+        bool isLastLine = dialogueIndex == scenarioData.dialogueLines.Length - 1;
 
         leftNextButton.gameObject.SetActive(
             hasMultipleLines && !isFirstLine
@@ -276,21 +392,25 @@ public class ScenarioManager : MonoBehaviour
 
     private void ShowCurrentDialogue()
     {
-        if (dialogueLines == null || dialogueLines.Length == 0)
+        if (scenarioData == null)
+        {
+            Debug.LogWarning("No Scenario Data assigned.");
+            return;
+        }
+        
+        if (scenarioData.dialogueLines == null || scenarioData.dialogueLines.Length == 0)
         {
             Debug.LogWarning("No dialogue lines assigned.");
             return;
         }
 
         dialogueIndex = Mathf.Clamp(
-            dialogueIndex,
-            0,
-            dialogueLines.Length - 1
+            dialogueIndex, 0, scenarioData.dialogueLines.Length - 1
         );
 
         UpdateDialogueNavigation();
 
-        DialogueLine currentLine = dialogueLines[dialogueIndex];
+        ScenarioData.DialogueLine currentLine = scenarioData.dialogueLines[dialogueIndex];
 
         nameText.text = currentLine.speakerName;
 
@@ -334,7 +454,7 @@ public class ScenarioManager : MonoBehaviour
         }
 
         dialogueText.text =
-            dialogueLines[dialogueIndex].dialogueText;
+            scenarioData.dialogueLines[dialogueIndex].dialogueText;
 
         isTyping = false;
         return true;
@@ -347,7 +467,7 @@ public class ScenarioManager : MonoBehaviour
             return;
         }
 
-        if (dialogueIndex >= dialogueLines.Length - 1)
+        if (dialogueIndex >= scenarioData.dialogueLines.Length - 1)
         {
             return;
         }
@@ -425,12 +545,22 @@ public class ScenarioManager : MonoBehaviour
 
     private void SubmitExplanation()
     {
-        string explanation = explanationInputField.text;
+        string explanation =
+            explanationInputField.text;
 
-        Debug.Log("Selected choice: " + selectedChoice);
-        Debug.Log("Explanation: " + explanation);
+        Debug.Log(
+            "Selected choice: " + selectedChoice
+        );
+
+        Debug.Log(
+            "Explanation: " + explanation
+        );
 
         resultsUI.SetActive(false);
         backgroundUI.SetActive(false);
+
+        GoToNextScenario();
     }
+
+    
 }

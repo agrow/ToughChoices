@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f112c1a561f36bc4eb309a06360bedf4, type: 3}
+  m_Name: 3CompetitiveSportScenario
+  m_EditorClassIdentifier: Assembly-CSharp::ScenarioData
+  scenarioName: Competitive Sport
+  sceneName: OutdoorHighschoolScene
+  dialogueLines:
+  - speakerName: 
+    dialogueText: 'For the first day of school, your school organizes a voluntary
+      competition in a sport that you have never played before. '
+    typingSpeed: 0.03
+  - speakerName: 
+    dialogueText: 'You are not sure how good you will be at playing the sport. '
+    typingSpeed: 0.03
+  - speakerName: 
+    dialogueText: How likely are you to enter the competition?
+    typingSpeed: 0.03
+  questionText: How likely are you to enter the competition?
