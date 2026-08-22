@@ -31,6 +31,11 @@ public class ScenarioManager : MonoBehaviour
     [SerializeField] private GameObject startScreenUI;
     [SerializeField] private Button startButton;
     [SerializeField] private Button settingsStartButton;
+    [SerializeField] private GameObject startButtons;
+    [SerializeField] private GameObject userIDButtons;
+    [SerializeField] private Button userIDConfirmButton;
+    [SerializeField] private TMP_InputField userIDInputField;
+    [SerializeField] private TMP_Text userIDErrorText;
 
     [Header("Settings Screen UI")]
     [SerializeField] private GameObject settingsUI;
@@ -105,6 +110,7 @@ public class ScenarioManager : MonoBehaviour
         settingsStartButton.onClick.AddListener(ShowSettingsScreen);
         adminButton.onClick.AddListener(ShowAdminPin);
         confirmSettingsButton.onClick.AddListener(HideSettingsScreen);
+        userIDConfirmButton.onClick.AddListener(ValidateUserID);
         startButton.onClick.AddListener(ShowIntroduction);
         submitButton.onClick.AddListener(SubmitExplanation);
         clickAnywhereButton.onClick.AddListener(ShowNextDialogue);
@@ -140,6 +146,8 @@ public class ScenarioManager : MonoBehaviour
 
         startScreenUI.SetActive(true);
         backgroundUI.SetActive(true);
+        userIDButtons.SetActive(true);
+        startButtons.SetActive(false);
         dialogueUI.SetActive(false);
         choicesUI.SetActive(false);
         resultsUI.SetActive(false);
@@ -147,12 +155,49 @@ public class ScenarioManager : MonoBehaviour
         settingsButton.gameObject.SetActive(false);
         settingsStartButton.gameObject.SetActive(true);
         clickAnywhereButton.gameObject.SetActive(true);
+        userIDConfirmButton.gameObject.SetActive(true);
         adminButton.gameObject.SetActive(false);
 
         if (explanationInputField != null)
         {
             explanationInputField.text = "";
         }
+    }
+
+    private void ValidateUserID()
+    {
+        string userID = userIDInputField.text.Trim();
+
+        if (userID.Length != 5)
+        {
+            userIDErrorText.text =
+                "Please enter a 5-digit ID number.";
+
+            return;
+        }
+
+        userIDErrorText.text = "";
+
+        //StudyDataManager.Instance.SetUserID(userID);
+
+        ShowStartButtons();
+    }
+
+     private void ShowStartButtons()
+    {
+        startScreenUI.SetActive(true);
+        backgroundUI.SetActive(true);
+        userIDButtons.SetActive(false);
+        startButtons.SetActive(true);
+        dialogueUI.SetActive(false);
+        choicesUI.SetActive(false);
+        resultsUI.SetActive(false);
+
+        settingsButton.gameObject.SetActive(false);
+        settingsStartButton.gameObject.SetActive(true);
+        clickAnywhereButton.gameObject.SetActive(true);
+        userIDConfirmButton.gameObject.SetActive(true);
+        adminButton.gameObject.SetActive(false);
     }
 
     private void ShowSettingsScreen()
