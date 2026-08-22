@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f112c1a561f36bc4eb309a06360bedf4, type: 3}
+  m_Name: 1PublicSpeaking
+  m_EditorClassIdentifier: Assembly-CSharp::ScenarioData
+  scenarioName: Public Speaking
+  sceneName: OutdoorHighschoolScene
+  dialogueLines:
+  - speakerName: 
+    dialogueText: 'Imagine your school is hosting an open-house event for prospective
+      students and their families. It is expected that up to 500 guests will attend. '
+    typingSpeed: 0.03
+  - speakerName: 
+    dialogueText: "Your school is recruiting volunteers to get on a stage and speak
+      to the attendees about their experience as a student. You want to volunteer
+      but you have never spoken to an audience this large before and you don\u2019t
+      know if you can do it. "
+    typingSpeed: 0.03
+  - speakerName: 
+    dialogueText: How likely are you to volunteer for this opportunity?
+    typingSpeed: 0.03
+  questionText: How likely are you to volunteer for this opportunity?

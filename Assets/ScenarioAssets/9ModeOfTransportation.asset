@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f112c1a561f36bc4eb309a06360bedf4, type: 3}
+  m_Name: 9ModeOfTransportation
+  m_EditorClassIdentifier: Assembly-CSharp::ScenarioData
+  scenarioName: Mode Of Transportation
+  sceneName: OutdoorHighschoolScene
+  dialogueLines:
+  - speakerName: 
+    dialogueText: 'A nearby college in your community is offering summer classes
+      on some interesting and new topics that are unfamiliar to you. '
+    typingSpeed: 0.03
+  - speakerName: 
+    dialogueText: 'Imagine you are going sightseeing in a new country with some family. '
+    typingSpeed: 0.03
+  - speakerName: 
+    dialogueText: 'There is a metro station nearby that takes you to your next site,
+      but you are unfamiliar with the public transportation system in this country. '
+    typingSpeed: 0.03
+  - speakerName: 
+    dialogueText: 'Taking a rideshare service like Uber would take a similar amount
+      of time. '
+    typingSpeed: 0.03
+  - speakerName: 
+    dialogueText: 'Learning to navigate public transportation may be a fun learning
+      experience, but you are concerned about getting lost or feeling uncomfortable
+      on the metro. '
+    typingSpeed: 0.03
+  - speakerName: 
+    dialogueText: 'How likely are you to suggest taking the metro? '
+    typingSpeed: 0.03
+  questionText: 'How likely are you to suggest taking the metro? '

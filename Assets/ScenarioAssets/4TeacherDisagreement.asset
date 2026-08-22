@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f112c1a561f36bc4eb309a06360bedf4, type: 3}
+  m_Name: 4TeacherDisagreement
+  m_EditorClassIdentifier: Assembly-CSharp::ScenarioData
+  scenarioName: Teacher Disagreement
+  sceneName: OutdoorHighschoolScene
+  dialogueLines:
+  - speakerName: 
+    dialogueText: 'Imagine you are in a class where your instructor makes a comment
+      that goes against your personal beliefs or morals. '
+    typingSpeed: 0.03
+  - speakerName: 
+    dialogueText: 'You are thinking about speaking up and sharing your position. '
+    typingSpeed: 0.03
+  - speakerName: 
+    dialogueText: 'You have never directly challenged an instructor before and you
+      have no idea about how this instructor will respond. '
+    typingSpeed: 0.03
+  - speakerName: 
+    dialogueText: How likely are you to share your perspective with your instructor?
+    typingSpeed: 0.03
+  questionText: How likely are you to share your perspective with your instructor?

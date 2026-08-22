@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f112c1a561f36bc4eb309a06360bedf4, type: 3}
+  m_Name: 7TryingNewFood
+  m_EditorClassIdentifier: Assembly-CSharp::ScenarioData
+  scenarioName: Trying New Food
+  sceneName: OutdoorHighschoolScene
+  dialogueLines:
+  - speakerName: 
+    dialogueText: 'Imagine you and your family are going out to eat at your favorite
+      restaurant. '
+    typingSpeed: 0.03
+  - speakerName: 
+    dialogueText: 'There is a new item on the menu that catches your attention. '
+    typingSpeed: 0.03
+  - speakerName: 
+    dialogueText: "You want to try something new but you don\u2019t want to waste
+      money on food you might not enjoy. "
+    typingSpeed: 0.03
+  - speakerName: 
+    dialogueText: How likely are you to select the new dish?
+    typingSpeed: 0.03
+  questionText: 'How likely are you to select the new dish?
+
+'

@@ -3895,8 +3895,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScenarioSequenceManager
   allScenarios:
+  - {fileID: 11400000, guid: 6cffd48cc90bb0048a3363aaae846a89, type: 2}
   - {fileID: 11400000, guid: cded17d648db4444e8bce0efb9b09271, type: 2}
-  - {fileID: 11400000, guid: cded17d648db4444e8bce0efb9b09271, type: 2}
+  - {fileID: 11400000, guid: ac89bf7e38a714b4a9c924feb099898c, type: 2}
 --- !u!4 &560860552
 Transform:
   m_ObjectHideFlags: 0

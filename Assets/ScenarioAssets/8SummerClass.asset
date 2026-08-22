@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f112c1a561f36bc4eb309a06360bedf4, type: 3}
+  m_Name: 8SummerClass
+  m_EditorClassIdentifier: Assembly-CSharp::ScenarioData
+  scenarioName: Summer Class
+  sceneName: OutdoorHighschoolScene
+  dialogueLines:
+  - speakerName: 
+    dialogueText: 'A nearby college in your community is offering summer classes
+      on some interesting and new topics that are unfamiliar to you. '
+    typingSpeed: 0.03
+  - speakerName: 
+    dialogueText: These classes may expose you to new ideas and different ways of
+      thinking.
+    typingSpeed: 0.03
+  - speakerName: 
+    dialogueText: 'Enrolling will require you to stay local and invest a lot of your
+      time in the course. '
+    typingSpeed: 0.03
+  - speakerName: 
+    dialogueText: 'You may really enjoy taking a class, but you are uncertain whether
+      it will be worth your time and money. '
+    typingSpeed: 0.03
+  - speakerName: 
+    dialogueText: How likely are you to enroll in a summer class?
+    typingSpeed: 0.03
+  questionText: How likely are you to enroll in a summer class?

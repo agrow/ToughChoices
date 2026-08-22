@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 2LeadershipPositionScenario
   m_EditorClassIdentifier: Assembly-CSharp::ScenarioData
   scenarioName: Leadership Position
-  sceneName: TBD
+  sceneName: OutdoorHighschoolScene
   dialogueLines:
   - speakerName: 
     dialogueText: 'Imagine you are part of a student organization and a leadership
