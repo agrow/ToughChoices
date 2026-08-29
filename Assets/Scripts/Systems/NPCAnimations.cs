@@ -24,9 +24,6 @@ cycle through multiple animations, or they may only perform one for the whole ga
 public class NPCAnimations : MonoBehaviour
 {
     public string animation;
-    public float speed;
-    public Transform CenterEnd1;
-    public Transform CenterEnd2;
 
     private Animator animator;
     private float crossfade = 0.0f;
@@ -75,26 +72,6 @@ public class NPCAnimations : MonoBehaviour
             animator.CrossFade(idle, crossfade);
             animationStarted = true;
         }
-        else if (String.Compare(running, animation) == 0)
-        {
-            animator.CrossFade(running, crossfade);
-            animationStarted = true;
-        }
-        else if (String.Compare(walking, animation) == 0)
-        {
-            // Get the local X position (relative to parent)
-            float localX = transform.localPosition.x;
-
-            if (localX <= trackTransitionX2 && localX >= trackTransitionX1)
-            {
-                transform.position += transform.forward * speed * Time.deltaTime;
-                animator.CrossFade(walking, crossfade);
-            }
-            else if (localX <= trackTransitionX1)
-            {
-                transform.RotateAround(CenterEnd1.position, new Vector3(0, -1f, 0), 4 * Time.deltaTime);
-            }
-        }
         else if (String.Compare(jump, animation) == 0)
         {
             animator.CrossFade(jump, crossfade);
@@ -122,13 +99,29 @@ public class NPCAnimations : MonoBehaviour
         }
         else if (String.Compare(sittingtalking1, animation) == 0)
         {
-            animator.CrossFade(sittingtalking1, crossfade);
-            animationStarted = true;
+            if (timer > 0)
+            {
+                animator.CrossFade(sittingidle, 0.0f);
+                timer -= Time.deltaTime;
+            }
+            else
+            {
+                animator.CrossFade(sittingtalking1, 0.2f);
+                animationStarted = true;
+            }
         }
         else if (String.Compare(sittingtalking2, animation) == 0)
         {
-            animator.CrossFade(sittingtalking2, crossfade);
-            animationStarted = true;
+            if (timer > 0)
+            {
+                animator.CrossFade(sittingidle, 0.0f);
+                timer -= Time.deltaTime;
+            }
+            else
+            {
+                animator.CrossFade(sittingtalking2, 0.2f);
+                animationStarted = true;
+            }
         }
         else if (String.Compare(sittingidle, animation) == 0)
         {
@@ -164,7 +157,8 @@ public class NPCAnimations : MonoBehaviour
         }
         else
         {
-            Debug.Log("false");
+            animator.CrossFade(idle, crossfade);
+            animationStarted = true;
         }
     }
 }
