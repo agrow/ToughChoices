@@ -24507,13 +24507,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 901530384}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.9396927, z: 0, w: 0.34202018}
-  m_LocalPosition: {x: -47.99, y: 1.82, z: 37.58}
+  m_LocalRotation: {x: 0.005693477, y: 0.9905013, z: -0.043246236, w: 0.13040203}
+  m_LocalPosition: {x: -50.936, y: 1.82, z: 36.809}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 140, z: 0}
+  m_LocalEulerAnglesHint: {x: 5, y: 165, z: 0}
 --- !u!1001 &907121112
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -44877,7 +44877,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 60.000004
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -44903,8 +44903,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1400142117}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.06645227, y: 0.90984374, z: -0.16042998, w: 0.3768696}
-  m_LocalPosition: {x: 33.47, y: 7, z: -48.09}
+  m_LocalRotation: {x: 0.005693477, y: 0.9905013, z: -0.043246236, w: 0.13040203}
+  m_LocalPosition: {x: -50.936, y: 1.82, z: 36.809}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -68230,15 +68230,15 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278255561
-  m_fontColor: {r: 0.78686786, g: 1, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 1
   m_colorMode: 3
   m_fontColorGradient:
-    topLeft: {r: 0, g: 0.11664665, b: 1, a: 1}
-    topRight: {r: 0, g: 0.16470611, b: 1, a: 1}
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
     bottomLeft: {r: 1, g: 0.9999999, b: 1, a: 1}
-    bottomRight: {r: 0.8207547, g: 0.13783666, b: 0, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
   m_fontColorGradientPreset: {fileID: 0}
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
