@@ -25,6 +25,8 @@ public class ScenarioData : ScriptableObject
     }
 
     [Header("Scenario")]
+    [Range(1, 9)]
+    public int scenarioID;
     public string scenarioName;
 
     [Header("Environment")]

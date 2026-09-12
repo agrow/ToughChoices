@@ -95,6 +95,7 @@ public class ScenarioManager : MonoBehaviour
 
     private string selectedChoice;
     private int dialogueIndex = 0;
+    private int currentScenarioOrder = 0;
 
     private Coroutine typingCoroutine;
     private bool isTyping = false;
@@ -168,17 +169,17 @@ public class ScenarioManager : MonoBehaviour
     {
         string userID = userIDInputField.text.Trim();
 
-        if (userID.Length != 5)
+        if (userID.Length != 3)
         {
             userIDErrorText.text =
-                "Please enter a 5-digit ID number.";
+                "Please enter a 3-digit ID number.";
 
             return;
         }
 
         userIDErrorText.text = "";
 
-        //StudyDataManager.Instance.SetUserID(userID);
+        DataExportManager.Instance.SetUserID(userID);
 
         ShowStartButtons();
     }
@@ -306,6 +307,13 @@ public class ScenarioManager : MonoBehaviour
     {
         yield return StartCoroutine(LoadScenarioScene());
 
+        currentScenarioOrder++;
+
+        DataExportManager.Instance.BeginScenario(
+            scenarioData.scenarioID,
+            currentScenarioOrder
+        );
+
         ShowDialogue();
     }
 
@@ -335,12 +343,17 @@ public class ScenarioManager : MonoBehaviour
             );
         }
 
-        // Load the next scenario environment immediately.
         yield return StartCoroutine(
             LoadScenarioScene()
         );
 
-        // Start its dialogue immediately.
+        currentScenarioOrder++;
+
+        DataExportManager.Instance.BeginScenario(
+            scenarioData.scenarioID,
+            currentScenarioOrder
+        );
+
         ShowDialogue();
     }
 
@@ -567,7 +580,18 @@ public class ScenarioManager : MonoBehaviour
     {
         selectedChoice = choiceLabels[index];
 
-        Debug.Log("Choice selected: " + selectedChoice);
+        int likertValue = 5 - index;
+
+        DataExportManager.Instance.RecordLikert1(
+            likertValue
+        );
+
+        Debug.Log(
+            "Choice selected: " +
+            selectedChoice +
+            " | Value: " +
+            likertValue
+        );
 
         choicesUI.SetActive(false);
         dialogueUI.SetActive(false);
@@ -593,13 +617,11 @@ public class ScenarioManager : MonoBehaviour
         string explanation =
             explanationInputField.text;
 
-        Debug.Log(
-            "Selected choice: " + selectedChoice
+        DataExportManager.Instance.RecordOpen1(
+            explanation
         );
 
-        Debug.Log(
-            "Explanation: " + explanation
-        );
+        DataExportManager.Instance.CompleteScenario();
 
         resultsUI.SetActive(false);
         backgroundUI.SetActive(false);

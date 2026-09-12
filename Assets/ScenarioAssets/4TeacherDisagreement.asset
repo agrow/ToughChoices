@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f112c1a561f36bc4eb309a06360bedf4, type: 3}
   m_Name: 4TeacherDisagreement
   m_EditorClassIdentifier: Assembly-CSharp::ScenarioData
+  scenarioID: 4
   scenarioName: Teacher Disagreement
   sceneName: OutdoorHighschoolScene
   dialogueLines:

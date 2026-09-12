@@ -23,20 +23,38 @@ public class SettingsManager : MonoBehaviour
 
     public static float TextSpeedMultiplier { get; private set; } = 1f;
 
+    public static float MasterVolume { get; private set; } = 1f;
+    private const string MasterVolumeKey = "MasterVolume";
+
     private void Start()
     {
+        // Load saved text speed.
         TextSpeedMultiplier = PlayerPrefs.GetFloat(TextSpeedKey, 1f);
+
         textSpeedSlider.SetValueWithoutNotify(TextSpeedMultiplier);
-        
+
+        // Load saved master volume.
+        MasterVolume = PlayerPrefs.GetFloat(MasterVolumeKey, 1f);
+
+        masterVolumeSlider.SetValueWithoutNotify(MasterVolume);
+
+        // Apply loaded volume to mixer.
+        SetMixerVolume("MasterVolume", MasterVolume);
+
         textSpeedSlider.onValueChanged.AddListener(SetTypingSpeed);
         masterVolumeSlider.onValueChanged.AddListener(SetMasterVolume);
         soundEffectsSlider.onValueChanged.AddListener(SetSoundEffectsVolume);
         voiceSlider.onValueChanged.AddListener(SetVoiceVolume);
-        
     }
 
     public void SetMasterVolume(float value)
     {
+        MasterVolume = value;
+
+        PlayerPrefs.SetFloat(MasterVolumeKey, value);
+
+        PlayerPrefs.Save();
+
         SetMixerVolume("MasterVolume", value);
     }
 

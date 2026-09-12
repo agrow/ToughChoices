@@ -7,7 +7,12 @@ public class EnvironmentSceneLoader : MonoBehaviour
     [SerializeField]
     private string environmentSceneName = "OutdoorHighSchoolScene";
 
-    private IEnumerator Start()
+    public void LoadEnvironment()
+    {
+        StartCoroutine(LoadEnvironmentRoutine());
+    }
+
+    private IEnumerator LoadEnvironmentRoutine()
     {
         Scene environmentScene =
             SceneManager.GetSceneByName(environmentSceneName);
