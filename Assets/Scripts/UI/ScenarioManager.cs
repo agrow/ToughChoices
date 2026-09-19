@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 
 public class ScenarioManager : MonoBehaviour
 {
@@ -80,6 +81,11 @@ public class ScenarioManager : MonoBehaviour
     [SerializeField] private Button submitButton;
     [SerializeField] private GameObject submitResponsePrompt;
 
+    [Header("Submit Response Prompt UI")]
+    [SerializeField] private GameObject submitResponsePromptUI;
+    [SerializeField] private Button confirmResponseButton;
+    [SerializeField] private Button cancelResponseButton;
+
     [Header("Background UI")]
     [SerializeField] private GameObject backgroundUI;
 
@@ -87,6 +93,7 @@ public class ScenarioManager : MonoBehaviour
     [SerializeField] private GameObject adminPromptUI;
 
     private bool startScreenWasActive;
+    private bool introductionWasActive;
     private bool dialogueWasActive;
     private bool choicesWereActive;
     private bool resultsWereActive;
@@ -113,11 +120,13 @@ public class ScenarioManager : MonoBehaviour
         confirmSettingsButton.onClick.AddListener(HideSettingsScreen);
         userIDConfirmButton.onClick.AddListener(ValidateUserID);
         startButton.onClick.AddListener(ShowIntroduction);
-        submitButton.onClick.AddListener(SubmitExplanation);
+        submitButton.onClick.AddListener(() => submitResponsePromptUI.SetActive(true));
         clickAnywhereButton.onClick.AddListener(ShowNextDialogue);
         rightNextButton.onClick.AddListener(ShowNextDialogue);
         leftNextButton.onClick.AddListener(ShowPreviousDialogue);
         nextButton.onClick.AddListener(StartScenario);
+        confirmResponseButton.onClick.AddListener(SubmitExplanation);
+        cancelResponseButton.onClick.AddListener(() => submitResponsePromptUI.SetActive(false));
         adminPromptUI.SetActive(false);
         settingsUI.SetActive(false);
 
@@ -152,6 +161,7 @@ public class ScenarioManager : MonoBehaviour
         dialogueUI.SetActive(false);
         choicesUI.SetActive(false);
         resultsUI.SetActive(false);
+        submitResponsePromptUI.SetActive(false);
 
         settingsButton.gameObject.SetActive(false);
         settingsStartButton.gameObject.SetActive(true);
@@ -165,7 +175,7 @@ public class ScenarioManager : MonoBehaviour
         }
     }
 
-    private void ValidateUserID()
+    public void ValidateUserID()
     {
         string userID = userIDInputField.text.Trim();
 
@@ -205,6 +215,7 @@ public class ScenarioManager : MonoBehaviour
     {
         // Remember the current UI state
         startScreenWasActive = startScreenUI.activeSelf;
+        introductionWasActive = introductionUI.activeSelf;
         dialogueWasActive = dialogueUI.activeSelf;
         choicesWereActive = choicesUI.activeSelf;
         resultsWereActive = resultsUI.activeSelf;
@@ -213,6 +224,7 @@ public class ScenarioManager : MonoBehaviour
 
         // Hide the current screen
         startScreenUI.SetActive(false);
+        introductionUI.SetActive(false);
         dialogueUI.SetActive(false);
         choicesUI.SetActive(false);
         resultsUI.SetActive(false);
@@ -234,6 +246,7 @@ public class ScenarioManager : MonoBehaviour
 
         // Restore whichever UI was active before Settings opened
         startScreenUI.SetActive(startScreenWasActive);
+        introductionUI.SetActive(introductionWasActive);
         dialogueUI.SetActive(dialogueWasActive);
         choicesUI.SetActive(choicesWereActive);
         resultsUI.SetActive(resultsWereActive);
@@ -612,10 +625,9 @@ public class ScenarioManager : MonoBehaviour
         explanationInputField.ActivateInputField();
     }
 
-    private void SubmitExplanation()
+    public void SubmitExplanation()
     {
-        string explanation =
-            explanationInputField.text;
+        string explanation = explanationInputField.text;
 
         DataExportManager.Instance.RecordOpen1(
             explanation
@@ -623,10 +635,16 @@ public class ScenarioManager : MonoBehaviour
 
         DataExportManager.Instance.CompleteScenario();
 
+        submitResponsePromptUI.SetActive(false);
         resultsUI.SetActive(false);
         backgroundUI.SetActive(false);
 
         GoToNextScenario();
+    }
+
+    public void ShowSubmitResponsePromptScreen()
+    {
+        submitResponsePromptUI.SetActive(true);
     }
 
     
