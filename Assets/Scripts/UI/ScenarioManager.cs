@@ -27,6 +27,7 @@ public class ScenarioManager : MonoBehaviour
     [SerializeField] private Button homeButton;
     [SerializeField] private Button settingsButton;
     [SerializeField] private Button adminButton;
+    [SerializeField] private Button restartButton;
 
     [Header("Start Screen UI")]
     [SerializeField] private GameObject startScreenUI;
@@ -89,8 +90,18 @@ public class ScenarioManager : MonoBehaviour
     [Header("Background UI")]
     [SerializeField] private GameObject backgroundUI;
 
-    [Header("System Prompts UI")]
+    [Header("Admin Prompt UI")]
     [SerializeField] private GameObject adminPromptUI;
+    [SerializeField] private Button adminClickAnywhereButton;
+    [SerializeField] private TMP_InputField adminPinInputField;
+    [SerializeField] private TMP_Text incorrectPinText;
+    [SerializeField] private string correctAdminPin = "1234";
+
+    [Header("Restart Prompt UI")]
+    [SerializeField] private GameObject restartPromptUI;
+    [SerializeField] private Button restartCancelButton;
+    [SerializeField] private Button restartConfirmButton;
+    [SerializeField] private Button restartClickAnywhereButton;
 
     private bool startScreenWasActive;
     private bool introductionWasActive;
@@ -98,6 +109,7 @@ public class ScenarioManager : MonoBehaviour
     private bool choicesWereActive;
     private bool resultsWereActive;
     private bool backgroundWasActive;
+    private bool scenarioSelectionWasActive;
     private bool clickAnywhereWasActive;
 
     private string selectedChoice;
@@ -106,6 +118,19 @@ public class ScenarioManager : MonoBehaviour
 
     private Coroutine typingCoroutine;
     private bool isTyping = false;
+
+    private void Update()
+    {
+        if (Keyboard.current == null)
+        {
+            return;
+        }
+
+        if (Keyboard.current.escapeKey.wasPressedThisFrame)
+        {
+            HandleEscapeKey();
+        }
+    }
 
     private void Start()
     {
@@ -127,8 +152,14 @@ public class ScenarioManager : MonoBehaviour
         nextButton.onClick.AddListener(StartScenario);
         confirmResponseButton.onClick.AddListener(SubmitExplanation);
         cancelResponseButton.onClick.AddListener(() => submitResponsePromptUI.SetActive(false));
-        adminPromptUI.SetActive(false);
         settingsUI.SetActive(false);
+        adminPromptUI.SetActive(false);
+        adminClickAnywhereButton.onClick.AddListener(() => adminPromptUI.SetActive(false));
+        adminPinInputField.onSubmit.AddListener((_) => ValidateAdminPin());
+        restartButton.onClick.AddListener(() => restartPromptUI.SetActive(true));
+        restartCancelButton.onClick.AddListener(() => restartPromptUI.SetActive(false));
+        restartClickAnywhereButton.onClick.AddListener(() => restartPromptUI.SetActive(false));
+        //restartConfirmButton.onClick.AddListener(insert awesome restart funct here);
 
         for (int i = 0; i < choiceButtons.Length; i++)
         {
@@ -164,14 +195,53 @@ public class ScenarioManager : MonoBehaviour
         submitResponsePromptUI.SetActive(false);
 
         settingsButton.gameObject.SetActive(false);
+        scenarioSelectionUI.gameObject.SetActive(false);
+        restartPromptUI.gameObject.SetActive(false);
+        restartButton.gameObject.SetActive(false);
         settingsStartButton.gameObject.SetActive(true);
         clickAnywhereButton.gameObject.SetActive(true);
         userIDConfirmButton.gameObject.SetActive(true);
         adminButton.gameObject.SetActive(false);
+        restartButton.gameObject.SetActive(false);
+        settingsButton.gameObject.SetActive(false);
 
         if (explanationInputField != null)
         {
             explanationInputField.text = "";
+        }
+    }
+
+    private void HandleEscapeKey()
+    {
+        // Close highest-priority popup first.
+        if (restartPromptUI.activeSelf)
+        {
+            restartPromptUI.SetActive(false);
+            return;
+        }
+
+        if (submitResponsePromptUI.activeSelf)
+        {
+            submitResponsePromptUI.SetActive(false);
+            return;
+        }
+
+        if (adminPromptUI.activeSelf)
+        {
+            adminPromptUI.SetActive(false);
+            return;
+        }
+
+        if (settingsUI.activeSelf)
+        {
+            HideSettingsScreen();
+            return;
+        }
+
+        if (scenarioSelectionUI.activeSelf)
+        {
+            scenarioSelectionUI.SetActive(false);
+            return;
         }
     }
 
@@ -194,6 +264,35 @@ public class ScenarioManager : MonoBehaviour
         ShowStartButtons();
     }
 
+    public void ValidateAdminPin()
+    {
+        string adminPin = adminPinInputField.text.Trim();
+
+        if (adminPin.Length != 4)
+        {
+            incorrectPinText.text = "Incorrect PIN. Try again.";
+
+            return;
+        }
+
+        if (adminPin != correctAdminPin)
+        {
+            incorrectPinText.text = "Incorrect PIN. Try again.";
+            adminPinInputField.text = "";
+            adminPinInputField.ActivateInputField();
+
+            return;
+        }
+
+        if (adminPin.Length >= 4)
+        {
+            adminPinInputField.DeactivateInputField();
+        }
+
+        incorrectPinText.text = "";
+        ShowScenarioSelectionScreen();
+    }
+
      private void ShowStartButtons()
     {
         startScreenUI.SetActive(true);
@@ -205,6 +304,7 @@ public class ScenarioManager : MonoBehaviour
         resultsUI.SetActive(false);
 
         settingsButton.gameObject.SetActive(false);
+        restartButton.gameObject.SetActive(false);
         settingsStartButton.gameObject.SetActive(true);
         clickAnywhereButton.gameObject.SetActive(true);
         userIDConfirmButton.gameObject.SetActive(true);
@@ -220,6 +320,7 @@ public class ScenarioManager : MonoBehaviour
         choicesWereActive = choicesUI.activeSelf;
         resultsWereActive = resultsUI.activeSelf;
         backgroundWasActive = backgroundUI.activeSelf;
+        scenarioSelectionWasActive = scenarioSelectionUI.activeSelf;
         clickAnywhereWasActive = clickAnywhereButton.gameObject.activeSelf;
 
         // Hide the current screen
@@ -229,6 +330,8 @@ public class ScenarioManager : MonoBehaviour
         choicesUI.SetActive(false);
         resultsUI.SetActive(false);
         backgroundUI.SetActive(false);
+        scenarioSelectionUI.SetActive(false);
+        restartPromptUI.SetActive(false);
         clickAnywhereButton.gameObject.SetActive(false);
 
         // Show Settings
@@ -236,6 +339,7 @@ public class ScenarioManager : MonoBehaviour
         backgroundUI.SetActive(true);
         adminButton.gameObject.SetActive(true);
         settingsButton.gameObject.SetActive(false);
+        restartButton.gameObject.SetActive(false);
     }
 
     private void HideSettingsScreen()
@@ -251,21 +355,38 @@ public class ScenarioManager : MonoBehaviour
         choicesUI.SetActive(choicesWereActive);
         resultsUI.SetActive(resultsWereActive);
         backgroundUI.SetActive(backgroundWasActive);
+        scenarioSelectionUI.SetActive(scenarioSelectionWasActive);
         clickAnywhereButton.gameObject.SetActive(clickAnywhereWasActive);
 
+        restartButton.gameObject.SetActive(
+            scenarioSelectionWasActive
+        );
         settingsButton.gameObject.SetActive(true); // bug here !!
     }
     
     private void ShowAdminPin()
     {
+        adminPinInputField.text = "";
+        incorrectPinText.text = "";
         adminPromptUI.SetActive(true);
         Debug.Log("Admin Pin Prompt Triggered!");
     }
 
     private void ShowScenarioSelectionScreen()
     {
+        // startScreenUI.SetActive(false);
+        // dialogueUI.SetActive(false);
+        // choicesUI.SetActive(false);
+        // resultsUI.SetActive(false);
+        // submitResponsePromptUI.SetActive(false);
+        // settingsUI.SetActive(false);
         adminPromptUI.SetActive(false);
+        settingsButton.gameObject.SetActive(false);
+        adminButton.gameObject.SetActive(false);
+
         scenarioSelectionUI.SetActive(true);
+        settingsButton.gameObject.SetActive(true);
+        restartButton.gameObject.SetActive(true);
     }
 
     private void ShowIntroduction()
@@ -276,10 +397,12 @@ public class ScenarioManager : MonoBehaviour
         dialogueUI.SetActive(false);
         choicesUI.SetActive(false);
         resultsUI.SetActive(false);
+        scenarioSelectionUI.SetActive(false);
 
         settingsButton.gameObject.SetActive(true);
         clickAnywhereButton.gameObject.SetActive(false);
         adminButton.gameObject.SetActive(false);
+        restartButton.gameObject.SetActive(false);
     }
 
     private IEnumerator LoadScenarioScene()
