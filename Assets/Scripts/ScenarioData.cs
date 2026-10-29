@@ -29,6 +29,9 @@ public class ScenarioData : ScriptableObject
     public int scenarioID;
     public string scenarioName;
 
+    [Header("Scenario Availability")]
+    public bool isAvailable = true;
+
     [Header("Environment")]
     public string sceneName;
 

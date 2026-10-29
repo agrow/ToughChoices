@@ -11,5 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/OutdoorHighSchoolScene.unity
     guid: c5b812550edd945be9648ca9d3628417
-  m_configObjects:
-    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  - enabled: 1
+    path: Assets/Scenes/IndoorClassroomScene.unity
+    guid: 0976f085403b946f2b0ada4481fb1b3e
+  m_configObjects: {}

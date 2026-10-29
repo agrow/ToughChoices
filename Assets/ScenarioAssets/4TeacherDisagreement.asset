@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ScenarioData
   scenarioID: 4
   scenarioName: Teacher Disagreement
-  sceneName: OutdoorHighschoolScene
+  sceneName: IndoorClassroomScene
   dialogueLines:
   - speakerName: 
     dialogueText: 'Imagine you are in a class where your instructor makes a comment

@@ -3,6 +3,8 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using UnityEngine;
+using SFB;
+using UnityEngine.EventSystems;
 
 public class DataExportManager : MonoBehaviour
 {
@@ -20,12 +22,12 @@ public class DataExportManager : MonoBehaviour
     private DateTime scenarioBeginTS;
 
     private DateTime likert1SubmitTS;
-    private int likert1Value;
+    private int? likert1Value;
     private DateTime open1SubmitTS;
     private string open1Response;
 
     private DateTime likert2SubmitTS;
-    private int likert2Value;
+    private int? likert2Value;
     private DateTime open2SubmitTS;
     private string open2Response;
 
@@ -36,8 +38,7 @@ public class DataExportManager : MonoBehaviour
 
     private string errorCode;
     private string errorMessage;
-
-
+    private bool scenarioInProgress = false;
 
     private void Awake()
     {
@@ -99,11 +100,11 @@ public class DataExportManager : MonoBehaviour
             scenarioOrder + "\t" +
             FormatTimestamp(scenarioBeginTS) + "\t" +
             FormatTimestamp(likert1SubmitTS) + "\t" +
-            likert1Value + "\t" +
+            (likert1Value?.ToString() ?? "") + "\t" +
             FormatTimestamp(open1SubmitTS) + "\t" +
             CleanText(open1Response) + "\t" +
             FormatTimestamp(likert2SubmitTS) + "\t" +
-            likert2Value + "\t" +
+            (likert2Value?.ToString() ?? "") + "\t" +
             FormatTimestamp(open2SubmitTS) + "\t" +
             CleanText(open2Response) + "\t" +
             volume.ToString(
@@ -171,13 +172,13 @@ public class DataExportManager : MonoBehaviour
         scenarioBeginTS = DateTime.Now;
 
         likert1SubmitTS = default;
-        likert1Value = 0;
+        likert1Value = null;
 
         open1SubmitTS = default;
         open1Response = "";
 
         likert2SubmitTS = default;
-        likert2Value = 0;
+        likert2Value = null;
 
         open2SubmitTS = default;
         open2Response = "";
@@ -186,6 +187,7 @@ public class DataExportManager : MonoBehaviour
         errorMessage = "";
 
         completed = false;
+        scenarioInProgress = true;
 
         Debug.Log(
             $"Started Scenario {scenarioID}, order {scenarioOrder}"
@@ -200,12 +202,28 @@ public class DataExportManager : MonoBehaviour
         Debug.Log("Recorded Likert 1: " + value);
     }
 
+    public void RecordLikert2(int value)
+    {
+        likert2Value = value;
+        likert2SubmitTS = DateTime.Now;
+
+        Debug.Log("Recorded Likert 2: " + value);
+    }
+
     public void RecordOpen1(string response)
     {
         open1Response = response;
         open1SubmitTS = DateTime.Now;
 
         Debug.Log("Recorded Open 1: " + response);
+    }
+
+    public void RecordOpen2(string response)
+    {
+        open2Response = response;
+        open2SubmitTS = DateTime.Now;
+
+        Debug.Log("Recorded Open 2: " + response);
     }
 
     private void CaptureCurrentSettings()
@@ -216,11 +234,19 @@ public class DataExportManager : MonoBehaviour
 
     public void CompleteScenario()
     {
+        if (!scenarioInProgress)
+        {
+            Debug.LogWarning("No active scenario to complete.");
+            return;
+        }
+
         completed = true;
 
         CaptureCurrentSettings();
 
         AppendCurrentScenarioToTSV();
+
+        scenarioInProgress = false;
     }
 
     public void RecordError(string code, string message)
@@ -229,6 +255,78 @@ public class DataExportManager : MonoBehaviour
         errorMessage = message;
 
         Debug.LogError($"[{code}] {message}");
+    }
+
+    public void RecordAdminOverride()
+    {
+        if (!scenarioInProgress)
+        {
+            return;
+        }
+
+        completed = false;
+
+        errorCode = "ADMIN_OVERRIDE";
+        errorMessage = "Scenario interrupted by administrator.";
+
+        CaptureCurrentSettings();
+
+        AppendCurrentScenarioToTSV();
+
+        scenarioInProgress = false;
+
+        Debug.Log(
+            $"Scenario {scenarioID} interrupted and exported."
+        );
+    }
+
+    public void ExportData()
+    {
+        // Clear the currently selected UI button.
+        if (EventSystem.current != null)
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+        }
+
+        if (!File.Exists(filePath))
+        {
+            Debug.LogWarning("No data available to export.");
+            return;
+        }
+
+        string destinationPath = StandaloneFileBrowser.SaveFilePanel(
+            "Export Tough Choices Data",
+            "",
+            "ToughChoicesData.tsv",
+            "tsv"
+        );
+
+        if (string.IsNullOrEmpty(destinationPath))
+        {
+            return;
+        }
+
+        try
+        {
+            if (Path.GetFullPath(destinationPath) ==
+                Path.GetFullPath(filePath))
+            {
+                Debug.LogWarning(
+                    "Cannot export onto the original file."
+                );
+                return;
+            }
+
+            File.Copy(filePath, destinationPath, true);
+
+            Debug.Log("Data exported to: " + destinationPath);
+        }
+        catch (Exception exception)
+        {
+            Debug.LogError(
+                "Export failed: " + exception.Message
+            );
+        }
     }
 
 }

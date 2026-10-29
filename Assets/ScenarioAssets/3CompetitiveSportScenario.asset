@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ScenarioData
   scenarioID: 3
   scenarioName: Competitive Sport
+  isAvailable: 1
   sceneName: OutdoorHighschoolScene
   dialogueLines:
   - speakerName: 
