@@ -51,7 +51,7 @@ public class DataExportManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        filePath = Path.Combine(Application.persistentDataPath, "ToughChoicesTest.tsv");
+        filePath = Path.Combine(Application.persistentDataPath, "ToughChoicesData.tsv");
 
         appVersion = Application.version;
     }
