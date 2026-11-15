@@ -507,6 +507,7 @@ public class ScenarioManager : MonoBehaviour
         question1ResultsUI.SetActive(false);
         question2UI.SetActive(false);
         question2ResultsUI.SetActive(false);
+        submitResponsePromptUI.SetActive(false);
         conclusionUI.SetActive(false);
         backgroundUI.SetActive(false);
         scenarioSelectionUI.SetActive(false);
