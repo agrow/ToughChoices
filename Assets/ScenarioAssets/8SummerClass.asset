@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ScenarioData
   scenarioID: 8
   scenarioName: Summer Class
-  isAvailable: 0
+  isAvailable: 1
   sceneName: OutdoorHighschoolScene
   dialogueLines:
   - speakerName: 
