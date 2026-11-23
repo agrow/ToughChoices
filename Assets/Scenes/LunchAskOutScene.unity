@@ -9863,7 +9863,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f31709cb8a5304340b9f48dd98d94c26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NPCAnimations
-  animation: SittingTalking1
+  animation: SittingIdle
 --- !u!1001 &959809766
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13965,7 +13965,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4525299494038442, guid: 5086cec82e4dc4814bfbc4e418001113, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.563
+      value: -0.375
       objectReference: {fileID: 0}
     - target: {fileID: 4525299494038442, guid: 5086cec82e4dc4814bfbc4e418001113, type: 3}
       propertyPath: m_LocalPosition.y
@@ -13973,7 +13973,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4525299494038442, guid: 5086cec82e4dc4814bfbc4e418001113, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.598
+      value: -1.737
       objectReference: {fileID: 0}
     - target: {fileID: 4525299494038442, guid: 5086cec82e4dc4814bfbc4e418001113, type: 3}
       propertyPath: m_LocalRotation.w
