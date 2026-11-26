@@ -295,7 +295,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 104243164}
-  m_Enabled: 0
+  m_Enabled: 1
 --- !u!20 &104243166
 Camera:
   m_ObjectHideFlags: 0
@@ -2448,7 +2448,7 @@ GameObject:
   - component: {fileID: 243542969}
   - component: {fileID: 243542970}
   m_Layer: 0
-  m_Name: IndoorClassroomCinemachineTimeline
+  m_Name: Timeline
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
