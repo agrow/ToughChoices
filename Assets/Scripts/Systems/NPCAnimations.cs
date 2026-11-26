@@ -29,12 +29,8 @@ public class NPCAnimations : MonoBehaviour
     private float crossfade = 0.0f;
     private float timer;
     private bool animationStarted = false;
-    private float trackTransitionX1 = -27.5f;
-    private float trackTransitionX2 = 3.3f;
     
     private string idle = "Idle";
-    private string running = "Running";
-    private string walking = "Walking";
     private string jump = "Jump";
     private string talking1 = "Talking1";
     private string talking2 = "Talking2";
