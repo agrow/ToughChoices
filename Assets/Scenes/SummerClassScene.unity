@@ -17282,7 +17282,7 @@ GameObject:
   - component: {fileID: 375032493}
   - component: {fileID: 375032494}
   m_Layer: 0
-  m_Name: CinemachineTimeline
+  m_Name: Timeline
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

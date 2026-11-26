@@ -2448,7 +2448,7 @@ GameObject:
   - component: {fileID: 243542969}
   - component: {fileID: 243542970}
   m_Layer: 0
-  m_Name: IndoorClassroomCinemachineTimeline
+  m_Name: Timeline
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
